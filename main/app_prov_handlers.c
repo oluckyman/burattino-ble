@@ -18,7 +18,7 @@
 #include <tcpip_adapter.h>
 
 #include <wifi_provisioning/wifi_config.h>
-#include <custom_provisioning/custom_config.h>
+#include <auth_provisioning/auth_config.h>
 
 #include "app_prov.h"
 
@@ -47,16 +47,16 @@ static void free_config(wifi_prov_ctx_t **ctx)
     *ctx = NULL;
 }
 
-/****************** Handler for Custom Configuration *******************/
-static esp_err_t custom_config_handler(const custom_config_t *config)
+/****************** Handler for Auth Configuration *******************/
+static esp_err_t auth_config_handler(const auth_config_t *config)
 {
-    ESP_LOGI(TAG, "Custom config received :\n\tInfo : %s\n\tVersion : %d",
+    ESP_LOGI(TAG, "Auth config received :\n\tInfo : %s\n\tVersion : %d",
              config->info, config->version);
     // TODO: Store these guys in the memory, the same way as it stores wifi config
     return ESP_OK;
 }
 
-custom_prov_config_handler_t custom_prov_handler = custom_config_handler;
+auth_prov_config_handler_t auth_prov_handler = auth_config_handler;
 
 /****************** Handlers for Wi-Fi Configuration *******************/
 static esp_err_t get_status_handler(wifi_prov_config_get_data_t *resp_data, wifi_prov_ctx_t **ctx)

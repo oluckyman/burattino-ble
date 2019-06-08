@@ -1,8 +1,8 @@
-# Protobuf files for defining custom config-data packet structures
+# Protobuf files for defining auth config-data packet structures
 
-This is an example proto file defining custom configuration related data packet structures, namely -
-1. CustomConfigRequest - for sending configuration data consisting of various fields (Info and Version)
-2. CustomConfigResponse - for receiving configuration status (fail/success)
+This is an example proto file defining auth configuration related data packet structures, namely -
+1. AuthConfigRequest - for sending configuration data consisting of various fields
+2. AuthConfigResponse - for receiving configuration status (fail/success)
 
 Note : These proto files are not automatically compiled during the build process.
 

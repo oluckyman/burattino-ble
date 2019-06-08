@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef _CUSTOM_PROV_CONFIG_H_
-#define _CUSTOM_PROV_CONFIG_H_
+#ifndef _AUTH_PROV_CONFIG_H_
+#define _AUTH_PROV_CONFIG_H_
 
 /**
- * @brief   Custom config data received by device
+ * @brief   Auth config data received by device
  */
 typedef struct {
     char info[128];
     int  version;
-} custom_config_t;
+} auth_config_t;
 
 /**
  * @brief   Internal handler for receiving and responding to protocomm
  *          requests from master
  *
  * This is to be passed as priv_data for protocomm request handler
- * (refer to `custom_prov_config_data_handler()`) when calling `protocomm_add_endpoint()`.
+ * (refer to `auth_prov_config_data_handler()`) when calling `protocomm_add_endpoint()`.
  */
-typedef esp_err_t (*custom_prov_config_handler_t) (const custom_config_t *config);
+typedef esp_err_t (*auth_prov_config_handler_t) (const auth_config_t *config);
 
 /**
  * @brief   Handler for receiving and responding to requests from master
@@ -38,7 +38,7 @@ typedef esp_err_t (*custom_prov_config_handler_t) (const custom_config_t *config
  * This is to be registered as the `wifi_config` endpoint handler
  * (protocomm `protocomm_req_handler_t`) using `protocomm_add_endpoint()`
  */
-esp_err_t custom_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssize_t inlen,
-                                          uint8_t **outbuf, ssize_t *outlen, void *priv_data);
+esp_err_t auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssize_t inlen,
+                                        uint8_t **outbuf, ssize_t *outlen, void *priv_data);
 
 #endif

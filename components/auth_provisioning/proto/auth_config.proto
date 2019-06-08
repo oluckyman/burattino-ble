@@ -1,16 +1,16 @@
 syntax = "proto3";
 
-enum CustomConfigStatus {
+enum AuthConfigStatus {
     ConfigSuccess = 0;
     ConfigFail = 1;
 }
 
-message CustomConfigRequest {
+message AuthConfigRequest {
     string info = 1;
     int32 version = 2;
 }
 
-message CustomConfigResponse {
-    CustomConfigStatus status = 1;
+message AuthConfigResponse {
+    AuthConfigStatus status = 1;
     int32 dummy = 2;
 }

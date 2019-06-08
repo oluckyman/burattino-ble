@@ -20,7 +20,7 @@
 #include <protocomm_security0.h>
 #include <protocomm_security1.h>
 #include <wifi_provisioning/wifi_config.h>
-#include <custom_provisioning/custom_config.h>
+#include <auth_provisioning/auth_config.h>
 
 #include "app_prov.h"
 #include "register_device.h"
@@ -30,7 +30,7 @@ static const char *ssid_prefix = "🌵•";
 
 /* Handlers for provisioning endpoint */
 extern wifi_prov_config_handlers_t wifi_prov_handlers;
-extern custom_prov_config_handler_t custom_prov_handler;
+extern auth_prov_config_handler_t auth_prov_handler;
 
 /**
  * @brief   Data relevant to provisioning application
@@ -65,7 +65,7 @@ static esp_err_t app_prov_start_service(void)
         {"prov-session", 0xFF51},
         {"prov-config",  0xFF52},
         {"proto-ver",    0xFF53},
-        {"custom-config",  0xFF54},
+        {"auth-config",  0xFF54},
     };
 
     /* Config for protocomm_ble_start() */
@@ -118,11 +118,11 @@ static esp_err_t app_prov_start_service(void)
         return ESP_FAIL;
     }
 
-    /* Add endpoint for provisioning to set custom config */
-    if (protocomm_add_endpoint(g_prov->pc, "custom-config",
-                               custom_prov_config_data_handler,
-                               (void *) custom_prov_handler) != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to set custom provisioning endpoint");
+    /* Add endpoint for provisioning to set auth config */
+    if (protocomm_add_endpoint(g_prov->pc, "auth-config",
+                               auth_prov_config_data_handler,
+                               (void *) auth_prov_handler) != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to set auth provisioning endpoint");
         protocomm_ble_stop(g_prov->pc);
         return ESP_FAIL;
     }
@@ -133,8 +133,8 @@ static esp_err_t app_prov_start_service(void)
 
 static void app_prov_stop_service(void)
 {
-    /* Remove provisioning endpoint for custom config */
-    protocomm_remove_endpoint(g_prov->pc, "custom-config");
+    /* Remove provisioning endpoint for auth config */
+    protocomm_remove_endpoint(g_prov->pc, "auth-config");
     /* Remove provisioning endpoint BLE */
     protocomm_remove_endpoint(g_prov->pc, "prov-config");
     /* Unset provisioning security */
