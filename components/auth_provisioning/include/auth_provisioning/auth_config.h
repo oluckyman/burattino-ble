@@ -35,7 +35,7 @@ typedef esp_err_t (*auth_prov_config_handler_t) (const auth_config_t *config);
 /**
  * @brief   Handler for receiving and responding to requests from master
  *
- * This is to be registered as the `wifi_config` endpoint handler
+ * This is to be registered as the `auth_config` endpoint handler
  * (protocomm `protocomm_req_handler_t`) using `protocomm_add_endpoint()`
  */
 esp_err_t auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssize_t inlen,

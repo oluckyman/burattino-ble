@@ -13,15 +13,28 @@
 // limitations under the License.
 
 #include <stdio.h>
-#include <esp_log.h>
 #include <string.h>
+#include <esp_log.h>
 #include <esp_err.h>
+#include <esp_system.h>
 
 #include <auth_provisioning/auth_config.h>
 
 #include "auth_config.pb-c.h"
 
 static const char *TAG = "auth_config";
+
+esp_err_t get_device_id(char *device_id) {
+    uint8_t mac_addr[6] = {0};
+    esp_err_t ret = esp_efuse_mac_get_default(mac_addr);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Get base MAC address from BLK0 of EFUSE error (%s)", esp_err_to_name(ret));
+        return ret;
+    }
+	sprintf(device_id, "%02X:%02X:%02X:%02X:%02X:%02X",
+            mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+    return ESP_OK;
+}
 
 int auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssize_t inlen, uint8_t **outbuf, ssize_t *outlen, void *priv_data)
 {
@@ -49,7 +62,14 @@ int auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssi
     }
     auth_config_request__free_unpacked(req, NULL);
 
-    resp.deviceid = "here will be device ID";
+    // Put Device ID into response
+    char device_id[(2 + 1) * 6];
+    if (get_device_id(device_id) != ESP_OK) {
+        resp.status = AUTH_CONFIG_STATUS__ConfigFail;
+    } else {
+        resp.deviceid = device_id;
+    }
+    ESP_LOGI(TAG, "Auth Config Response with Device ID:\n\t%s", resp.deviceid);
 
     *outlen = auth_config_response__get_packed_size(&resp);
     if (*outlen <= 0) {
@@ -66,29 +86,3 @@ int auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssi
     auth_config_response__pack(&resp, *outbuf);
     return ESP_OK;
 }
-
-//     asprintf(&request_params->body, "{\"device\": \"%s\"}", device_id);
-
-//             // 3. send http request to the backend to register device
-//             if (get_device_id(device_id) != ESP_OK) {
-//                 response(conn, 500, "Cannot obtain device id");
-//             } else {
-//                 status_code = register_device_on_backend(parsed_request->endpoint, parsed_request->token, device_id);
-//                 if (status_code == 200) {
-//                     response(conn, 200, device_id);
-//                 } else {
-//                     response(conn, 500, "Cannot register device on backend");
-//                 }
-//             }
-
-// esp_err_t get_device_id(char *device_id) {
-//     uint8_t mac_addr[6] = {0};
-//     esp_err_t ret = esp_efuse_mac_get_default(mac_addr);
-//     if (ret != ESP_OK) {
-//         ESP_LOGE(TAG, "Get base MAC address from BLK0 of EFUSE error (%s)", esp_err_to_name(ret));
-//         return ret;
-//     }
-// 	sprintf(device_id, "%02X:%02X:%02X:%02X:%02X:%02X",
-//             mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
-//     return ESP_OK;
-// }

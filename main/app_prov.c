@@ -394,6 +394,6 @@ esp_err_t app_prov_start_ble_provisioning(int security, const protocomm_security
         return err;
     }
 
-    ESP_LOGI(TAG, "BLE Provisioning started");
+    ESP_LOGI(TAG, "============================== BLE Provisioning started ==============================");
     return ESP_OK;
 }
