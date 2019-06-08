@@ -23,11 +23,12 @@
 #include <custom_provisioning/custom_config.h>
 
 #include "app_prov.h"
+#include "register_device.h"
 
 static const char *TAG = "app_prov";
 static const char *ssid_prefix = "🌵•";
 
-/* Handlers for wifi_config provisioning endpoint */
+/* Handlers for provisioning endpoint */
 extern wifi_prov_config_handlers_t wifi_prov_handlers;
 extern custom_prov_config_handler_t custom_prov_handler;
 
@@ -205,6 +206,20 @@ esp_err_t app_prov_event_handler(void *ctx, system_event_t *event)
         /* Station got IP. That means configuration is successful.
          * Schedule timer to stop provisioning app after 30 seconds. */
         g_prov->wifi_state = WIFI_PROV_STA_CONNECTED;
+        // TODO: send request to backend here and do not stop the timer.
+        int status_code = register_device_on_backend("www.google.com", "token", "123");
+        ESP_LOGI("sleep", "sleeeeep");
+        sleep(20);
+        ESP_LOGI("sleep", "sleeeeep");
+        sleep(20);
+        ESP_LOGI("sleep", "sleeeeep");
+        sleep(20);
+        if (status_code == 200) {
+            ESP_LOGI(TAG, "registered with success");
+        } else {
+            ESP_LOGI(TAG, "did not registered with failure");
+        }
+
         if (g_prov && g_prov->timer) {
             esp_timer_start_once(g_prov->timer, 30000*1000U);
         }

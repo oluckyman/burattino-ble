@@ -52,6 +52,7 @@ static esp_err_t custom_config_handler(const custom_config_t *config)
 {
     ESP_LOGI(TAG, "Custom config received :\n\tInfo : %s\n\tVersion : %d",
              config->info, config->version);
+    // TODO: Store these guys in the memory, the same way as it stores wifi config
     return ESP_OK;
 }
 
