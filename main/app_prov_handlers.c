@@ -50,8 +50,8 @@ static void free_config(wifi_prov_ctx_t **ctx)
 /****************** Handler for Auth Configuration *******************/
 static esp_err_t auth_config_handler(const auth_config_t *config)
 {
-    ESP_LOGI(TAG, "Auth config received :\n\tInfo : %s\n\tVersion : %d",
-             config->info, config->version);
+    ESP_LOGI(TAG, "Auth config received :\n\tEndpoint : %s\n\tToken : %s",
+             config->endpoint, config->token);
     // TODO: Store these guys in the memory, the same way as it stores wifi config
     return ESP_OK;
 }

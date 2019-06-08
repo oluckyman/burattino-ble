@@ -40,8 +40,8 @@ int auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssi
 
     if (app_handler_auth_config) {
         auth_config_t config;
-        strlcpy(config.info, req->info, sizeof(config.info));
-        config.version = req->version;
+        strlcpy(config.endpoint, req->endpoint, sizeof(config.endpoint));
+        strlcpy(config.token, req->token, sizeof(config.token));
 
         esp_err_t err = app_handler_auth_config(&config);
         resp.status = (err == ESP_OK) ? AUTH_CONFIG_STATUS__ConfigSuccess :
@@ -49,7 +49,7 @@ int auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssi
     }
     auth_config_request__free_unpacked(req, NULL);
 
-    resp.dummy = 47;    // Set a non zero value of dummy
+    resp.deviceid = "here will be device ID";
 
     *outlen = auth_config_response__get_packed_size(&resp);
     if (*outlen <= 0) {
@@ -66,3 +66,29 @@ int auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssi
     auth_config_response__pack(&resp, *outbuf);
     return ESP_OK;
 }
+
+//     asprintf(&request_params->body, "{\"device\": \"%s\"}", device_id);
+
+//             // 3. send http request to the backend to register device
+//             if (get_device_id(device_id) != ESP_OK) {
+//                 response(conn, 500, "Cannot obtain device id");
+//             } else {
+//                 status_code = register_device_on_backend(parsed_request->endpoint, parsed_request->token, device_id);
+//                 if (status_code == 200) {
+//                     response(conn, 200, device_id);
+//                 } else {
+//                     response(conn, 500, "Cannot register device on backend");
+//                 }
+//             }
+
+// esp_err_t get_device_id(char *device_id) {
+//     uint8_t mac_addr[6] = {0};
+//     esp_err_t ret = esp_efuse_mac_get_default(mac_addr);
+//     if (ret != ESP_OK) {
+//         ESP_LOGE(TAG, "Get base MAC address from BLK0 of EFUSE error (%s)", esp_err_to_name(ret));
+//         return ret;
+//     }
+// 	sprintf(device_id, "%02X:%02X:%02X:%02X:%02X:%02X",
+//             mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+//     return ESP_OK;
+// }

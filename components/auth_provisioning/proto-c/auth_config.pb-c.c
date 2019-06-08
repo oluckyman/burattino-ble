@@ -100,33 +100,33 @@ void   auth_config_response__free_unpacked
 static const ProtobufCFieldDescriptor auth_config_request__field_descriptors[2] =
 {
   {
-    "info",
+    "endpoint",
     1,
     PROTOBUF_C_LABEL_NONE,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(AuthConfigRequest, info),
+    offsetof(AuthConfigRequest, endpoint),
     NULL,
     &protobuf_c_empty_string,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
   {
-    "version",
+    "token",
     2,
     PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_INT32,
+    PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(AuthConfigRequest, version),
+    offsetof(AuthConfigRequest, token),
     NULL,
-    NULL,
+    &protobuf_c_empty_string,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
 static const unsigned auth_config_request__field_indices_by_name[] = {
-  0,   /* field[0] = info */
-  1,   /* field[1] = version */
+  0,   /* field[0] = endpoint */
+  1,   /* field[1] = token */
 };
 static const ProtobufCIntRange auth_config_request__number_ranges[1 + 1] =
 {
@@ -163,20 +163,20 @@ static const ProtobufCFieldDescriptor auth_config_response__field_descriptors[2]
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
   {
-    "dummy",
+    "deviceId",
     2,
     PROTOBUF_C_LABEL_NONE,
-    PROTOBUF_C_TYPE_INT32,
+    PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(AuthConfigResponse, dummy),
+    offsetof(AuthConfigResponse, deviceid),
     NULL,
-    NULL,
+    &protobuf_c_empty_string,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
 static const unsigned auth_config_response__field_indices_by_name[] = {
-  1,   /* field[1] = dummy */
+  1,   /* field[1] = deviceId */
   0,   /* field[0] = status */
 };
 static const ProtobufCIntRange auth_config_response__number_ranges[1 + 1] =

@@ -6,11 +6,11 @@ enum AuthConfigStatus {
 }
 
 message AuthConfigRequest {
-    string info = 1;
-    int32 version = 2;
+    string endpoint = 1;
+    string token = 2;
 }
 
 message AuthConfigResponse {
     AuthConfigStatus status = 1;
-    int32 dummy = 2;
+    string deviceId = 2;
 }

@@ -19,8 +19,8 @@
  * @brief   Auth config data received by device
  */
 typedef struct {
-    char info[128];
-    int  version;
+    char endpoint[200];
+    char token[1000];
 } auth_config_t;
 
 /**

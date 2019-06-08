@@ -32,23 +32,23 @@ typedef enum _AuthConfigStatus {
 struct  _AuthConfigRequest
 {
   ProtobufCMessage base;
-  char *info;
-  int32_t version;
+  char *endpoint;
+  char *token;
 };
 #define AUTH_CONFIG_REQUEST__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&auth_config_request__descriptor) \
-    , (char *)protobuf_c_empty_string, 0 }
+    , (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string }
 
 
 struct  _AuthConfigResponse
 {
   ProtobufCMessage base;
   AuthConfigStatus status;
-  int32_t dummy;
+  char *deviceid;
 };
 #define AUTH_CONFIG_RESPONSE__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&auth_config_response__descriptor) \
-    , AUTH_CONFIG_STATUS__ConfigSuccess, 0 }
+    , AUTH_CONFIG_STATUS__ConfigSuccess, (char *)protobuf_c_empty_string }
 
 
 /* AuthConfigRequest methods */
