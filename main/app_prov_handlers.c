@@ -52,7 +52,16 @@ static esp_err_t auth_config_handler(const auth_config_t *config)
 {
     ESP_LOGI(TAG, "Auth config received :\n\tEndpoint : %s\n\tToken : %s",
              config->endpoint, config->token);
-    // TODO: Store these guys in the memory, the same way as it stores wifi config
+
+    auth_config_t *auth_config;
+    // Pass a pointer to the pointer to awoid creating the `auth_config_t` structure which leads to stack overflow
+    if (app_prov_get_auth_config(&auth_config) != ESP_OK) {
+        ESP_LOGW(TAG, "Prov app not running");
+        return ESP_FAIL;
+    }
+    memcpy((char *) auth_config->endpoint, config->endpoint, strnlen(config->endpoint, sizeof(auth_config->endpoint)));
+    memcpy((char *) auth_config->token, config->token, strnlen(config->token, sizeof(auth_config->token)));
+
     return ESP_OK;
 }
 

@@ -46,6 +46,10 @@ struct app_prov_data {
 
     /* Code for WiFi station disconnection (if disconnected) */
     wifi_prov_sta_fail_reason_t wifi_disconnect_reason;
+
+    /* Auth Config received from the app.
+       Used to send the registration request to the backend */
+    auth_config_t auth_config;
 };
 
 /* Pointer to provisioning application data */
@@ -284,6 +288,16 @@ esp_err_t app_prov_get_wifi_disconnect_reason(wifi_prov_sta_fail_reason_t* reaso
     return ESP_OK;
 }
 
+esp_err_t app_prov_get_auth_config(auth_config_t **auth_config)
+{
+    if (g_prov == NULL || auth_config == NULL) {
+        return ESP_FAIL;
+    }
+    // Operate with pointers here to avoid creating `auth_config_t` structure clone
+    *auth_config = &g_prov->auth_config;
+    return ESP_OK;
+}
+
 esp_err_t app_prov_is_provisioned(bool *provisioned)
 {
     *provisioned = false;
@@ -394,6 +408,6 @@ esp_err_t app_prov_start_ble_provisioning(int security, const protocomm_security
         return err;
     }
 
-    ESP_LOGI(TAG, "============================== BLE Provisioning started ==============================");
+    ESP_LOGI(TAG, "============================ BLE Provisioning started =============================");
     return ESP_OK;
 }

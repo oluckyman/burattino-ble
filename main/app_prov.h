@@ -13,6 +13,7 @@
 
 #include <protocomm_security.h>
 #include <wifi_provisioning/wifi_config.h>
+#include <auth_provisioning/auth_config.h>
 
 /**
  * @brief   Get state of WiFi Station during provisioning
@@ -34,13 +35,24 @@ esp_err_t app_prov_get_wifi_state(wifi_prov_sta_state_t* state);
  * @brief   Get reason code in case of WiFi station
  *          disconnection during provisioning
  *
-* @param[out] reason    Pointer to wifi_prov_sta_fail_reason_t variable to be filled
+ * @param[out] reason    Pointer to wifi_prov_sta_fail_reason_t variable to be filled
  *
  * @return
  *  - ESP_OK    : Successfully retrieved wifi disconnect reason
  *  - ESP_FAIL  : Provisioning app not running
  */
 esp_err_t app_prov_get_wifi_disconnect_reason(wifi_prov_sta_fail_reason_t* reason);
+
+/**
+ * @brief   Get Auth Config structure
+ *
+ * @param[out] auth_config    Pointer to pointer to auth_config_t variable
+ *
+ * @return
+ *  - ESP_OK    : Successfully retrieved auth config
+ *  - ESP_FAIL  : Provisioning app not running
+ */
+esp_err_t app_prov_get_auth_config(auth_config_t** auth_config);
 
 /**
  * @brief   Event handler for provisioning app
