@@ -7,7 +7,7 @@
 static const char *TAG = "bur[register-device]";
 static EventGroupHandle_t event_group;
 
-int register_device_on_backend(const char *endpoint, const char *token, const char *device_id) {
+BackendResponse register_device_on_backend(const char *endpoint, const char *token, const char *device_id) {
     ESP_LOGI(TAG, ">>>> Send Request to Backend");
 
     RequestParams *request_params = calloc(1, sizeof(RequestParams));
@@ -17,7 +17,7 @@ int register_device_on_backend(const char *endpoint, const char *token, const ch
     asprintf(&request_params->body, "{\"device\": \"%s\"}", device_id);
 
     event_group = xEventGroupCreate();
-    int status_code = http_request(event_group, request_params);
+    BackendResponse response = http_request(event_group, request_params);
     // TODO: release event_group?
 
     free(request_params->url);
@@ -26,5 +26,5 @@ int register_device_on_backend(const char *endpoint, const char *token, const ch
     free(request_params);
 
     ESP_LOGI(TAG, "<<<< Finish Request to Backend");
-    return status_code;
+    return response;
 }

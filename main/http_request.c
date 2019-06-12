@@ -14,6 +14,8 @@
 static EventGroupHandle_t event_group;
 static const char *TAG = "bur[http-request]";
 
+BackendResponse backend_response;
+
 
 esp_err_t _http_event_handler(esp_http_client_event_t *evt) {
     switch(evt->event_id) {
@@ -32,6 +34,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt) {
         case HTTP_EVENT_ON_DATA:
             if (!esp_http_client_is_chunked_response(evt->client)) {
                 ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA:\n%.*s\n", evt->data_len, (char *)evt->data);
+                snprintf(backend_response.message, sizeof(backend_response.message), "%.*s", evt->data_len, (char *)evt->data);
             }
             break;
         case HTTP_EVENT_ON_FINISH:
@@ -47,13 +50,6 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt) {
     return ESP_OK;
 }
 
-
-struct BackendResponse {
-    int status_code;
-    char message[100];
-};
-
-struct BackendResponse backend_response;
 
 void http_request_task(void *pvParameters) {
     RequestParams *params = (RequestParams *)pvParameters;
@@ -91,13 +87,11 @@ void http_request_task(void *pvParameters) {
 }
 
 
-int http_request(EventGroupHandle_t _event_group, RequestParams *params) {
+BackendResponse http_request(EventGroupHandle_t _event_group, RequestParams *params) {
     event_group = _event_group;
 
     xEventGroupClearBits(event_group, HTTP_REQUEST_DONE_BIT);
     xTaskCreate(&http_request_task, "http_request_task", 4096, params, 5, NULL);
     xEventGroupWaitBits(event_group, HTTP_REQUEST_DONE_BIT, true, false, portMAX_DELAY);
-    // TODO: refactor it to return more information about the result
-    // implement Response struct containing status code and message
-    return backend_response.status_code;
+    return backend_response;
 }
