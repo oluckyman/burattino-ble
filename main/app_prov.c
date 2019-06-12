@@ -23,8 +23,6 @@
 #include <auth_provisioning/auth_config.h>
 
 #include "app_prov.h"
-#include "register_device.h"
-#include "http_request.h"
 
 static const char *TAG = "app_prov";
 static const char *ssid_prefix = "🌵•";
@@ -53,7 +51,7 @@ struct app_prov_data {
     auth_config_t auth_config;
 
     /* Response code and messagre received from the backend */
-    BackendResponse registration_response;
+    // BackendResponse registration_response;
 };
 
 /* Pointer to provisioning application data */
@@ -214,14 +212,9 @@ esp_err_t app_prov_event_handler(void *ctx, system_event_t *event)
         /* Station got IP. That means configuration is successful.
          * Schedule timer to stop provisioning app after 30 seconds. */
         g_prov->wifi_state = WIFI_PROV_STA_CONNECTED;
-        // TODO: send request to backend here and do not stop the timer.
-        BackendResponse response = register_device_on_backend(g_prov->auth_config.endpoint, g_prov->auth_config.token, "123");
-        ESP_LOGI(TAG, "Registration response: %d\n%s", response.status_code, response.message);
-        memcpy(&g_prov->registration_response, &response, sizeof(response));
-
-        if (g_prov && g_prov->timer) {
-            esp_timer_start_once(g_prov->timer, 30000*1000U);
-        }
+        // if (g_prov && g_prov->timer) {
+        //     esp_timer_start_once(g_prov->timer, 30000*1000U);
+        // }
         break;
 
     case SYSTEM_EVENT_STA_DISCONNECTED:
@@ -283,6 +276,7 @@ esp_err_t app_prov_get_wifi_disconnect_reason(wifi_prov_sta_fail_reason_t* reaso
     return ESP_OK;
 }
 
+// TODO: remove it as unused
 esp_err_t app_prov_get_auth_config(auth_config_t **auth_config)
 {
     if (g_prov == NULL || auth_config == NULL) {

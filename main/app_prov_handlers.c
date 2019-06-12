@@ -20,6 +20,8 @@
 #include <wifi_provisioning/wifi_config.h>
 #include <auth_provisioning/auth_config.h>
 
+#include "register_device.h"
+#include "http_request.h"
 #include "app_prov.h"
 
 static const char* TAG = "app_prov_handler";
@@ -53,14 +55,21 @@ static esp_err_t auth_config_handler(const auth_config_t *config)
     ESP_LOGI(TAG, "Auth config received :\n\tEndpoint : %s\n\tToken : %s",
              config->endpoint, config->token);
 
-    auth_config_t *auth_config;
+
+
+    BackendResponse response = register_device_on_backend(config->endpoint, config->token, "DEVICE ID HERE 123");
+    ESP_LOGI(TAG, "Registration response: %d\n%s", response.status_code, response.message);
+    // TODO: return mesage somehow
+
+    // memcpy(&g_prov->registration_response, &response, sizeof(response));
+    // auth_config_t *auth_config;
     // Pass a pointer to the pointer to awoid creating the `auth_config_t` structure which leads to stack overflow
-    if (app_prov_get_auth_config(&auth_config) != ESP_OK) {
-        ESP_LOGW(TAG, "Prov app not running");
-        return ESP_FAIL;
-    }
-    memcpy((char *) auth_config->endpoint, config->endpoint, strnlen(config->endpoint, sizeof(auth_config->endpoint)));
-    memcpy((char *) auth_config->token, config->token, strnlen(config->token, sizeof(auth_config->token)));
+    // if (app_prov_get_auth_config(&auth_config) != ESP_OK) {
+    //     ESP_LOGW(TAG, "Prov app not running");
+    //     return ESP_FAIL;
+    // }
+    // memcpy((char *) auth_config->endpoint, config->endpoint, strnlen(config->endpoint, sizeof(auth_config->endpoint)));
+    // memcpy((char *) auth_config->token, config->token, strnlen(config->token, sizeof(auth_config->token)));
 
     return ESP_OK;
 }
