@@ -51,27 +51,21 @@ int auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssi
     auth_config_response__init(&resp);
     resp.status = AUTH_CONFIG_STATUS__ConfigFail;
 
-    if (app_handler_auth_config) {
+    char device_id[(2 + 1) * 6];
+    if (app_handler_auth_config && get_device_id(device_id) == ESP_OK) {
         auth_config_t config;
         strlcpy(config.endpoint, req->endpoint, sizeof(config.endpoint));
         strlcpy(config.token, req->token, sizeof(config.token));
-        // TODO: pass device ID into apphanlder
 
-        esp_err_t err = app_handler_auth_config(&config);
+        esp_err_t err = app_handler_auth_config(&config, device_id);
         // TODO: get the message from the handler and put it into the status
         // TODO: add "message" field to the status
         resp.status = (err == ESP_OK) ? AUTH_CONFIG_STATUS__ConfigSuccess :
                                         AUTH_CONFIG_STATUS__ConfigFail;
+        resp.deviceid = device_id;
     }
     auth_config_request__free_unpacked(req, NULL);
 
-    // Put Device ID into response
-    char device_id[(2 + 1) * 6];
-    if (get_device_id(device_id) != ESP_OK) {
-        resp.status = AUTH_CONFIG_STATUS__ConfigFail;
-    } else {
-        resp.deviceid = device_id;
-    }
     ESP_LOGI(TAG, "Auth Config Response with Device ID:\n\t%s", resp.deviceid);
 
     *outlen = auth_config_response__get_packed_size(&resp);

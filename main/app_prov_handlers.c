@@ -50,14 +50,12 @@ static void free_config(wifi_prov_ctx_t **ctx)
 }
 
 /****************** Handler for Auth Configuration *******************/
-static esp_err_t auth_config_handler(const auth_config_t *config)
+static esp_err_t auth_config_handler(const auth_config_t *config, const char *device_id)
 {
     ESP_LOGI(TAG, "Auth config received :\n\tEndpoint : %s\n\tToken : %s",
              config->endpoint, config->token);
 
-
-
-    BackendResponse response = register_device_on_backend(config->endpoint, config->token, "DEVICE ID HERE 123");
+    BackendResponse response = register_device_on_backend(config->endpoint, config->token, device_id);
     ESP_LOGI(TAG, "Registration response: %d\n%s", response.status_code, response.message);
     // TODO: return mesage somehow
 

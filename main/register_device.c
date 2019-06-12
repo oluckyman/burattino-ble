@@ -4,6 +4,7 @@
 #include "freertos/event_groups.h"
 #include "./http_request.h"
 
+
 static const char *TAG = "bur[register-device]";
 static EventGroupHandle_t event_group;
 
@@ -17,6 +18,9 @@ BackendResponse register_device_on_backend(const char *endpoint, const char *tok
     asprintf(&request_params->body, "{\"device\": \"%s\"}", device_id);
 
     event_group = xEventGroupCreate();
+
+    ESP_LOGI(TAG, "HTTP Request:\n\tURL: %s\n\tToken: %s\n\tBody: %s", request_params->url, request_params->token, request_params->body);
+
     BackendResponse response = http_request(event_group, request_params);
     // TODO: release event_group?
 

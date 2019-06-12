@@ -30,7 +30,7 @@ typedef struct {
  * This is to be passed as priv_data for protocomm request handler
  * (refer to `auth_prov_config_data_handler()`) when calling `protocomm_add_endpoint()`.
  */
-typedef esp_err_t (*auth_prov_config_handler_t) (const auth_config_t *config);
+typedef esp_err_t (*auth_prov_config_handler_t) (const auth_config_t *config, const char *device_id);
 
 /**
  * @brief   Handler for receiving and responding to requests from master
