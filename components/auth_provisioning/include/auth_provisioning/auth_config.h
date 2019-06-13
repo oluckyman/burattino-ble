@@ -29,8 +29,10 @@ typedef struct {
  *
  * This is to be passed as priv_data for protocomm request handler
  * (refer to `auth_prov_config_data_handler()`) when calling `protocomm_add_endpoint()`.
+ * 
+ * @param[in] message A pointer to the error message. Should be be dealocated after usage: free(message)
  */
-typedef esp_err_t (*auth_prov_config_handler_t) (const auth_config_t *config, const char *device_id);
+typedef esp_err_t (*auth_prov_config_handler_t) (const auth_config_t *config, const char *device_id, char **message);
 
 /**
  * @brief   Handler for receiving and responding to requests from master

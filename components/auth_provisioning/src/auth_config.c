@@ -57,7 +57,11 @@ int auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssi
         strlcpy(config.endpoint, req->endpoint, sizeof(config.endpoint));
         strlcpy(config.token, req->token, sizeof(config.token));
 
-        esp_err_t err = app_handler_auth_config(&config, device_id);
+
+        char *message;
+        esp_err_t err = app_handler_auth_config(&config, device_id, &message);
+        ESP_LOGI(TAG, "got the message: %s", message);
+        free(message);
         // TODO: get the message from the handler and put it into the status
         // TODO: add "message" field to the status
         resp.status = (err == ESP_OK) ? AUTH_CONFIG_STATUS__ConfigSuccess :
