@@ -56,24 +56,12 @@ static esp_err_t auth_config_handler(const auth_config_t *config, const char *de
              config->endpoint, config->token);
 
     BackendResponse response = register_device_on_backend(config->endpoint, config->token, device_id);
-    ESP_LOGI(TAG, "Registration response: %d\n%s", response.status_code, response.message);
     if (response.status_code != 200) {
         if (asprintf(message, "%d: %s", response.status_code, response.message) == -1) {
             ESP_LOGE(TAG, "Cannot write messsage response");
         }
         return ESP_FAIL;
     }
-
-    // memcpy(&g_prov->registration_response, &response, sizeof(response));
-    // auth_config_t *auth_config;
-    // Pass a pointer to the pointer to awoid creating the `auth_config_t` structure which leads to stack overflow
-    // if (app_prov_get_auth_config(&auth_config) != ESP_OK) {
-    //     ESP_LOGW(TAG, "Prov app not running");
-    //     return ESP_FAIL;
-    // }
-    // memcpy((char *) auth_config->endpoint, config->endpoint, strnlen(config->endpoint, sizeof(auth_config->endpoint)));
-    // memcpy((char *) auth_config->token, config->token, strnlen(config->token, sizeof(auth_config->token)));
-
     return ESP_OK;
 }
 

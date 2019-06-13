@@ -52,25 +52,22 @@ int auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssi
     resp.status = AUTH_CONFIG_STATUS__ConfigFail;
 
     char device_id[(2 + 1) * 6];
+    char *message; // handler will allocate memory for the message, so need to release it in the end
     if (app_handler_auth_config && get_device_id(device_id) == ESP_OK) {
         auth_config_t config;
         strlcpy(config.endpoint, req->endpoint, sizeof(config.endpoint));
         strlcpy(config.token, req->token, sizeof(config.token));
 
 
-        char *message;
         esp_err_t err = app_handler_auth_config(&config, device_id, &message);
-        ESP_LOGI(TAG, "got the message: %s", message);
-        free(message);
-        // TODO: get the message from the handler and put it into the status
-        // TODO: add "message" field to the status
         resp.status = (err == ESP_OK) ? AUTH_CONFIG_STATUS__ConfigSuccess :
                                         AUTH_CONFIG_STATUS__ConfigFail;
         resp.deviceid = device_id;
+        resp.backendmessage = message;
     }
     auth_config_request__free_unpacked(req, NULL);
 
-    ESP_LOGI(TAG, "Auth Config Response with Device ID:\n\t%s", resp.deviceid);
+    ESP_LOGI(TAG, "Auth Config Response:\n\tDevice ID: %s\n\tMessage: %s", resp.deviceid, resp.backendmessage);
 
     *outlen = auth_config_response__get_packed_size(&resp);
     if (*outlen <= 0) {
@@ -85,5 +82,7 @@ int auth_prov_config_data_handler(uint32_t session_id, const uint8_t *inbuf, ssi
     }
 
     auth_config_response__pack(&resp, *outbuf);
+    // Now when the response was packed to the buffer we can release the message
+    free(message);
     return ESP_OK;
 }

@@ -45,10 +45,11 @@ struct  _AuthConfigResponse
   ProtobufCMessage base;
   AuthConfigStatus status;
   char *deviceid;
+  char *backendmessage;
 };
 #define AUTH_CONFIG_RESPONSE__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&auth_config_response__descriptor) \
-    , AUTH_CONFIG_STATUS__ConfigSuccess, (char *)protobuf_c_empty_string }
+    , AUTH_CONFIG_STATUS__ConfigSuccess, (char *)protobuf_c_empty_string, (char *)protobuf_c_empty_string }
 
 
 /* AuthConfigRequest methods */

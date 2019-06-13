@@ -148,7 +148,7 @@ const ProtobufCMessageDescriptor auth_config_request__descriptor =
   (ProtobufCMessageInit) auth_config_request__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor auth_config_response__field_descriptors[2] =
+static const ProtobufCFieldDescriptor auth_config_response__field_descriptors[3] =
 {
   {
     "status",
@@ -174,15 +174,28 @@ static const ProtobufCFieldDescriptor auth_config_response__field_descriptors[2]
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
+  {
+    "backendMessage",
+    3,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_STRING,
+    0,   /* quantifier_offset */
+    offsetof(AuthConfigResponse, backendmessage),
+    NULL,
+    &protobuf_c_empty_string,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
 };
 static const unsigned auth_config_response__field_indices_by_name[] = {
+  2,   /* field[2] = backendMessage */
   1,   /* field[1] = deviceId */
   0,   /* field[0] = status */
 };
 static const ProtobufCIntRange auth_config_response__number_ranges[1 + 1] =
 {
   { 1, 0 },
-  { 0, 2 }
+  { 0, 3 }
 };
 const ProtobufCMessageDescriptor auth_config_response__descriptor =
 {
@@ -192,7 +205,7 @@ const ProtobufCMessageDescriptor auth_config_response__descriptor =
   "AuthConfigResponse",
   "",
   sizeof(AuthConfigResponse),
-  2,
+  3,
   auth_config_response__field_descriptors,
   auth_config_response__field_indices_by_name,
   1,  auth_config_response__number_ranges,

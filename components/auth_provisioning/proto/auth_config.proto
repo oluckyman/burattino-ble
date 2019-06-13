@@ -13,4 +13,5 @@ message AuthConfigRequest {
 message AuthConfigResponse {
     AuthConfigStatus status = 1;
     string deviceId = 2;
+    string backendMessage = 3;
 }
