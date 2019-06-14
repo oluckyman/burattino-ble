@@ -276,17 +276,6 @@ esp_err_t app_prov_get_wifi_disconnect_reason(wifi_prov_sta_fail_reason_t* reaso
     return ESP_OK;
 }
 
-// TODO: remove it as unused
-esp_err_t app_prov_get_auth_config(auth_config_t **auth_config)
-{
-    if (g_prov == NULL || auth_config == NULL) {
-        return ESP_FAIL;
-    }
-    // Operate with pointers here to avoid creating `auth_config_t` structure clone
-    *auth_config = &g_prov->auth_config;
-    return ESP_OK;
-}
-
 esp_err_t app_prov_is_provisioned(bool *provisioned)
 {
     *provisioned = false;

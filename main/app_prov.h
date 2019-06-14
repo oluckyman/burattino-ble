@@ -43,16 +43,6 @@ esp_err_t app_prov_get_wifi_state(wifi_prov_sta_state_t* state);
  */
 esp_err_t app_prov_get_wifi_disconnect_reason(wifi_prov_sta_fail_reason_t* reason);
 
-/**
- * @brief   Get Auth Config structure
- *
- * @param[out] auth_config    Pointer to pointer to auth_config_t variable
- *
- * @return
- *  - ESP_OK    : Successfully retrieved auth config
- *  - ESP_FAIL  : Provisioning app not running
- */
-esp_err_t app_prov_get_auth_config(auth_config_t** auth_config);
 
 /**
  * @brief   Event handler for provisioning app
