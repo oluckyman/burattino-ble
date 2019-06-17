@@ -24,7 +24,7 @@
 
 #include "app_prov.h"
 
-static const char *TAG = "app_prov";
+static const char *TAG = "bur[app-prov]";
 static const char *ssid_prefix = "🌵•";
 
 /* Handlers for provisioning endpoint */
@@ -212,9 +212,6 @@ esp_err_t app_prov_event_handler(void *ctx, system_event_t *event)
         /* Station got IP. That means configuration is successful.
          * Schedule timer to stop provisioning app after 30 seconds. */
         g_prov->wifi_state = WIFI_PROV_STA_CONNECTED;
-        // if (g_prov && g_prov->timer) {
-        //     esp_timer_start_once(g_prov->timer, 30000*1000U);
-        // }
         break;
 
     case SYSTEM_EVENT_STA_DISCONNECTED:
@@ -309,6 +306,14 @@ esp_err_t app_prov_is_provisioned(bool *provisioned)
     return ESP_OK;
 }
 
+void app_prov_schedule_stop_provisioning() {
+    // start timer that will stop provisioning
+    if (g_prov && g_prov->timer) {
+        ESP_LOGI(TAG, "Schedule stop provisioning");
+        esp_timer_start_once(g_prov->timer, 30000*1000U);
+    }
+}
+
 esp_err_t app_prov_configure_sta(wifi_config_t *wifi_cfg)
 {
     /* Initialize WiFi with default config */
@@ -386,6 +391,6 @@ esp_err_t app_prov_start_ble_provisioning(int security, const protocomm_security
         return err;
     }
 
-    ESP_LOGI(TAG, "============================ BLE Provisioning started =============================");
+    ESP_LOGI(TAG, "========================= BLE Provisioning started =========================");
     return ESP_OK;
 }

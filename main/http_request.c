@@ -33,8 +33,13 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt) {
             break;
         case HTTP_EVENT_ON_DATA:
             if (!esp_http_client_is_chunked_response(evt->client)) {
-                ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA:\n%.*s\n", evt->data_len, (char *)evt->data);
-                snprintf(backend_response.message, sizeof(backend_response.message), "%.*s", evt->data_len, (char *)evt->data);
+                int printLen = evt->data_len > 200 ? 200 : evt->data_len;
+                ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA:\n%.*s\n", printLen, (char *)evt->data);
+                if (strlen(backend_response.message) == 0) {
+                    // HTTP_EVENT_ON_DATA will trigger multiple time for large responses, so
+                    // write only the first part of the response
+                    snprintf(backend_response.message, sizeof(backend_response.message), "%.*s", evt->data_len, (char *)evt->data);
+                }
             }
             break;
         case HTTP_EVENT_ON_FINISH:

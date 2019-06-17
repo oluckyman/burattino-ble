@@ -55,14 +55,13 @@ static esp_err_t auth_config_handler(const auth_config_t *config, const char *de
     ESP_LOGI(TAG, "Auth config received :\n\tEndpoint : %s\n\tToken : %s",
              config->endpoint, config->token);
 
-    BackendResponse response = register_device_on_backend(config->endpoint, config->token, device_id);
-    if (response.status_code != 200) {
-        if (asprintf(message, "%d: %s", response.status_code, response.message) == -1) {
-            ESP_LOGE(TAG, "Cannot write messsage response");
-        }
-        return ESP_FAIL;
+    char *hardcodedToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijk4MGVkMGQ3ODY2ODk1Y2E0M2MyMGRhZmM4NTlmMThjNjcwMWU3OTYiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiaWx5YSIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9idXJhdHRpbm8tMWRjMjQiLCJhdWQiOiJidXJhdHRpbm8tMWRjMjQiLCJhdXRoX3RpbWUiOjE1NTc2NjAyNzEsInVzZXJfaWQiOiJLWmJDVWpjVHZaWEs0bWV6MW11NU13NXA4aDAyIiwic3ViIjoiS1piQ1VqY1R2WlhLNG1lejFtdTVNdzVwOGgwMiIsImlhdCI6MTU2MDc3MjkwNywiZXhwIjoxNTYwNzc2NTA3LCJlbWFpbCI6ImlseWErbmV3QGJlbHNreS5pbiIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJpbHlhK25ld0BiZWxza3kuaW4iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.uc-mrR2v9PxnhaOFzdDP9dQ9gcfV_KOpek7hcVWwkifZtrO3k9OQ1BRwKQuhnTAm7QWkFR8un9BOsB9aYBNs8sdXKlp03vi6R7zV0wtM7Xf5ztLGyrpcmcRer8Tn2POM7Flx-VqfwLqNXKHIJERIzLuL7DrlMRwR4wmggqOHWMNGdOP5Yv5kMf6V2Qbur2WS2OTb5WL9LsYgBzUmYX4Y8jBi_MmYkZiTTtgFaK-pE6eFct7Jc5UGY0YQllCpZvTuvCadaw8rVPRlOgZRPsDQf-kpuqK-oT_JOVOaQFXx-Vxg8zFLTcTQXzOvszOuNZMVIxdE555ipEwjVdu_iUOAwA";
+    BackendResponse response = register_device_on_backend(config->endpoint, hardcodedToken /* config->token */, device_id);
+    if (asprintf(message, "%d: %s", response.status_code, response.message) == -1) {
+        ESP_LOGE(TAG, "Cannot write messsage response");
     }
-    return ESP_OK;
+    app_prov_schedule_stop_provisioning();
+    return response.status_code != 200 ? ESP_FAIL : ESP_OK;
 }
 
 auth_prov_config_handler_t auth_prov_handler = auth_config_handler;

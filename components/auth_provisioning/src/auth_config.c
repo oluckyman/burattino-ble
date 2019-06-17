@@ -22,7 +22,7 @@
 
 #include "auth_config.pb-c.h"
 
-static const char *TAG = "auth_config";
+static const char *TAG = "bur[auth-config]";
 
 esp_err_t get_device_id(char *device_id) {
     uint8_t mac_addr[6] = {0};
