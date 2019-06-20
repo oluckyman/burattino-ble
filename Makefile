@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := ble_prov
+PROJECT_NAME := burattino_ble
 
 include $(IDF_PATH)/make/project.mk
 
